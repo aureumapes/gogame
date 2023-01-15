@@ -44,7 +44,7 @@ func main() {
 		default:
 			break
 		}
-		print("\033[H\033[2J")
+		print("\033[H\033[2J") // This only works if your terminal supports Ascii codes
 	}
 }
 
