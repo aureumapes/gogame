@@ -47,7 +47,7 @@ func main() {
 		default:
 			break
 		}
-		print("\033[H\033[2J") // "Clears" the console, This only works if your terminal supports Ascii codes
+		print("\033[H\033[2J") // "Clears" the console, This will only work, when your terminal supports Ascii-Codes
 	}
 }
 
