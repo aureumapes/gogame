@@ -1,3 +1,3 @@
-module github.com/AureumApes/gogame
+module github.com/aureumapes/gogame
 
 go 1.19
