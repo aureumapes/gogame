@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-// SaveGame saves the Game tp the specified path
+// SaveGame saves the Game to the specified path
 func (g Game) SaveGame(path string, key []byte) {
 	f, _ := os.Create(path)
 	enc := gob.NewEncoder(f)
