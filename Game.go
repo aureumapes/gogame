@@ -1,47 +1,16 @@
 package gogame
 
+// Game is a struct containing Level Data
 type Game struct {
 	GameMap map[Vector]Cell
 }
 
+// NewGame is a function to create a new empty Game
 func NewGame() Game {
 	return Game{make(map[Vector]Cell)}
 }
 
-func (g Game) AddCell(pos Vector, content rune) {
-	g.GameMap[pos] = Cell{pos, content}
-}
-
-func (g Game) AddRow(row string, y int) {
-	for x, cell := range []rune(row) {
-		cell1 := Cell{Vector{x, y}, cell}
-		g.GameMap[cell1.Pos] = cell1
-	}
-}
-
-func (g Game) Render() {
-	y := 0
-	x := 0
-	for i := 0; i <= len(g.GameMap); i++ {
-		curr, exists := g.GameMap[Vector{x, y}]
-		if !exists {
-			y++
-			x = 0
-			print("\n")
-			curr, exists = g.GameMap[Vector{x, y}]
-			if !exists {
-				break
-			}
-			print(string(curr.Content))
-			x++
-		} else {
-			curr = g.GameMap[Vector{x, y}]
-			print(string(curr.Content))
-			x++
-		}
-	}
-}
-
+// MoveCell allows to move a Cell to another position, replacing its old Content with the Content, of the Cell, it moved to
 func (g Game) MoveCell(cell Cell, moveTo Vector) (Game, Cell) {
 	oldCell := cell
 	newCell, exists := g.GameMap[moveTo]
