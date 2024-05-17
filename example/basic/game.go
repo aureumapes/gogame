@@ -8,7 +8,7 @@ import (
 )
 
 type Level struct {
-	gogame.Map
+	gogame.Game
 	Name      string
 	Number    int64
 	PlayerPos gogame.Vector
@@ -26,89 +26,43 @@ func main() {
 		return
 	}
 	f.Close()
-	gameMap1 := Level{
-		gogame.NewMap(),
-		"startlvl",
+	game := Level{
+		gogame.NewGame(),
+		"",
 		01,
 		gogame.Vector{1, 1},
 	}
-	gameMap2 := Level{
-		gogame.NewMap(),
-		"secondlvl",
-		02,
-		gogame.Vector{1, 1},
-	}
-	game := gogame.NewGame("test", gameMap1.Name)
-	game.Maps[gameMap1.Name] = gameMap1.Map
-	game.Maps[gameMap2.Name] = gameMap2.Map
-
 	player := gogame.NewCell(gogame.Vector{X: 1, Y: 1}, '🔴')
-
-	gameMap1.AddRow("⬛⬛⬛⬛⬛", 0)
-	gameMap1.AddRow("⬛⬛⬛⬛⬛", 1)
-	gameMap1.AddRow("⬛⬛⬛⬛⬛", 2)
-	gameMap1.AddRow("⬛⬛⬛⬛⬛", 3)
-	gameMap1.AddRow("⬛⬛⬛⬛⬛", 4)
-	gameMap1.AddCell(player.Pos, player.Content)
-
-	gameMap2.AddRow("⬜⬜⬜⬜⬜", 0)
-	gameMap2.AddRow("⬜⬜⬜⬜⬜", 1)
-	gameMap2.AddRow("⬜⬜⬜⬜⬜", 2)
-	gameMap2.AddRow("⬜⬜⬜⬜⬜", 3)
-	gameMap2.AddRow("⬜⬜⬜⬜⬜", 4)
-	gameMap2.AddCell(player.Pos, '🟢')
-
-	currGameMap := gameMap1
+	game.AddRow("⬛⬛⬛⬛⬛", 0)
+	game.AddRow("⬛⬛⬛⬛⬛", 1)
+	game.AddRow("⬛⬛⬛⬛⬛", 2)
+	game.AddRow("⬛⬛⬛⬛⬛", 3)
+	game.AddRow("⬛⬛⬛⬛⬛", 4)
+	game.AddCell(player.Pos, player.Content)
 
 	for true {
-		currGameMap.Render()
+		game.Render()
 		input := gogame.ReadInput("Input > ")
 		switch input {
 		case 'w':
-			currGameMap.Map, player = currGameMap.MoveCell(player, player.GetUpper())
-			currGameMap.PlayerPos = player.Pos
+			game.Game, player = game.MoveCell(player, player.GetUpper())
 			break
 		case 'a':
-			currGameMap.Map, player = currGameMap.MoveCell(player, player.GetLeft())
-			currGameMap.PlayerPos = player.Pos
+			game.Game, player = game.MoveCell(player, player.GetLeft())
 			break
 		case 's':
-			currGameMap.Map, player = currGameMap.MoveCell(player, player.GetDowner())
-			currGameMap.PlayerPos = player.Pos
+			game.Game, player = game.MoveCell(player, player.GetDowner())
 			break
 		case 'd':
-			currGameMap.Map, player = currGameMap.MoveCell(player, player.GetRight())
-			currGameMap.PlayerPos = player.Pos
+			game.Game, player = game.MoveCell(player, player.GetRight())
 			break
 		case 'k':
-			game.Save(key)
+			game.Game.SaveGame("game.save", key)
 			break
 		case 'l':
-			currGameMap.Map = gogame.LoadMap("Saves/"+game.Name+"_"+currGameMap.Name, key)
-			player.Pos = currGameMap.PlayerPos
+			game.Game = gogame.LoadGame("game.save", key)
+			player.Pos = game.FindCell(player.Content)
 			break
-		case 'o':
-			game.Save(key)
-			if game.CurrentMap == gameMap1.Name {
-				gameMap1.PlayerPos = player.Pos
-				game.CurrentMap = gameMap2.Name
-				currGameMap = gameMap2
-				player.Content = '🟢'
-				player.Pos = gameMap2.PlayerPos
-			} else {
-				gameMap2.PlayerPos = player.Pos
-				game.CurrentMap = gameMap1.Name
-				currGameMap = gameMap1
-				player.Content = '🔴'
-				player.Pos = gameMap1.PlayerPos
-			}
-			break
-		case 'q':
-			for gameMapName, _ := range game.Maps {
-				os.Remove("Saves/" + game.Name + "_" + gameMapName)
-			}
-			os.Remove("Saves/master")
-			os.Exit(130)
 		default:
 			break
 		}
