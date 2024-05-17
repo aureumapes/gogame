@@ -1,3 +1,4 @@
+
 gogame
 ======
 A simple TUI-Game Library for go
@@ -9,7 +10,7 @@ Installation
 
 Example
 -------
-For examples see [examples](./example/) folder
+For examples see [examples](./example) folder
 
 Documentation
 -------------

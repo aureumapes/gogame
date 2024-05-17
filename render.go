@@ -1,23 +1,23 @@
 package gogame
 
 // Render prints the Game‎s grid as an
-func (g Game) Render() {
+func (m Map) Render() {
 	y := 0
 	x := 0
-	for i := 0; i <= len(g.GameMap); i++ {
-		curr, exists := g.GameMap[Vector{x, y}]
+	for i := 0; i <= len(m); i++ {
+		curr, exists := m[Vector{x, y}]
 		if !exists {
 			y++
 			x = 0
 			print("\n")
-			curr, exists = g.GameMap[Vector{x, y}]
+			curr, exists = m[Vector{x, y}]
 			if !exists {
 				break
 			}
 			print(string(curr.Content))
 			x++
 		} else {
-			curr = g.GameMap[Vector{x, y}]
+			curr = m[Vector{x, y}]
 			print(string(curr.Content))
 			x++
 		}

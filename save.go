@@ -8,11 +8,11 @@ import (
 	"os"
 )
 
-// SaveGame saves the Game to the specified path
-func (g Game) SaveGame(path string, key []byte) {
+// SaveMap saves the Map to the specified path
+func (m Map) SaveMap(path string, key []byte) {
 	f, _ := os.Create(path)
 	enc := gob.NewEncoder(f)
-	enc.Encode(g)
+	enc.Encode(m)
 	f.Close()
 
 	plaintext, _ := os.ReadFile(path)
@@ -25,8 +25,8 @@ func (g Game) SaveGame(path string, key []byte) {
 	os.WriteFile(path, ciphertext, 666)
 }
 
-// LoadGame returns a Game object, from a save file
-func LoadGame(path string, key []byte) Game {
+// LoadMap returns a Map object, from a save file
+func LoadMap(path string, key []byte) Map {
 	gameBytes, _ := os.ReadFile(path)
 	block, _ := aes.NewCipher(key)
 	iv := gameBytes[:aes.BlockSize]
@@ -37,7 +37,7 @@ func LoadGame(path string, key []byte) Game {
 	buf := new(bytes.Buffer)
 	buf.Write(gameBytes)
 	dec := gob.NewDecoder(buf)
-	var game Game
+	var game Map
 	dec.Decode(&game)
 	return game
 }
